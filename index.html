@@ -13,15 +13,11 @@
 	</style>
 </head>
 <body>
-	<!-- 通过key 减少复用 
-		 mode in-out先进入，再隐藏
-		 	  out-in先隐藏，再显示
-	-->
-
 	<div id="root">
+		<!-- 通过is关联的数据，控制展示哪一个组件 -->
 		<transition mode="out-in">
-			<div v-if="show" key="hello">hello word</div>
-			<div v-else key="bye">Bye word</div>
+			<component :is="type"></component>
+			
 		</transition>
 		<button @click="handleClick">toggle</button>	
 	</div>
@@ -30,15 +26,20 @@
 <script src="vue.js"></script>
 
 <script>
-
+	Vue.component('child',{
+		template:'<div>child</div>'
+	})
+	Vue.component('child-one',{
+		template:'<div>child-one</div>'
+	})
 	var vm=new Vue({
 		el:'#root',	
 		data:{
-			show:true
+			type:'child'
 		},
 		methods:{
 			handleClick:function(){
-				this.show=!this.show
+				this.type=this.type==='child'?'child-one':'child'
 			}
 			
 		}
