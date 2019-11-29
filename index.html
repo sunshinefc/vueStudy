@@ -2,18 +2,38 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Vue中的使用animate.css库</title>
+	<title>Vue中同时使用过度和动画</title>
 	<link rel="stylesheet" href="./animate.css">
+	<style>
+		.fade-enter,.fade-leave-to{
+			opacity: 0;
+		}
+		.fade-enter-active,.fade-leave-active{
+			transition: opacity 3s;
+		}
+	</style>
 	
 </head>
 <body>
+	<!-- animate.css提供@keyframes css3的动画效果 
+		1、动画时长以transition的动画时长为准
+			type="transition"
+		2、自定义动画时长 10s
+			：duration="10000"  
+		3、入场动画时长5s，出厂动画时长10s
+			:duration="{enter:5000, leave:10000}"
+	-->
 	<div id="root">
-		<!-- 使用animate.css动画库，自定义class名字 -->
 		<transition 
-			enter-active-class="animated swing" 
-			leave-active-class="animated shake">
+			:duration="{enter:5000, leave:10000}"
+			name="fade"
+			appear
+			enter-active-class="animated swing fade-enter-active" 
+			leave-active-class="animated shake fade-leave-active"
+			appear-active-class="animated swing">
 			<div v-show="show">hello word</div>
 		</transition>
+		
 		
 		<button @click="handleClick">切换</button>	
 	</div>
@@ -21,6 +41,9 @@
 </html>
 <script src="vue.js"></script>
 <script>
+
+
+
 	var vm=new Vue({
 		el:'#root',	
 		data:{
