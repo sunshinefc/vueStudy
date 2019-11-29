@@ -6,20 +6,7 @@
 	<link rel="stylesheet" href="./animate.css">
 </head>
 <body>
-	<!-- js动画钩子
-		入场动画
-		1、before-enter
-			元素即将显示的瞬间，vue会触发before-enter函数（控制台打印出before-enter）
-		2、enter
-			接收两个参数，一个el  一个done（回调函数）
-			开始运行动画效果，动画写在enter钩子
-			done被调用后，vue触发after-enter事件
-		3、after-enter
-		出场动画
-		1、before-leave
-		2、leave
-		3、after-leave
-	 -->
+
 	<div id="root">
 		<transition 
 			name="fade"
@@ -33,8 +20,9 @@
 </body>
 </html>
 <script src="vue.js"></script>
+<script src="velocity.min.js"></script>
 <script>
-	// el是指动画包裹的div标签
+
 	var vm=new Vue({
 		el:'#root',	
 		data:{
@@ -44,23 +32,22 @@
 			handleClick:function(){
 				this.show=!this.show
 			},
+			//还没有入场，让元素opacity变成0
 			handleBeforeEnter:function(el){
-				el.style.color='red'
-				console.log('before-enter')
+				el.style.opacity=0;
 			},
+			//对el元素实现一个动画，complete告诉vue动画执行完成
 			handleEnter:function(el,done){
-				setTimeout(()=>{
-					el.style.color='green'
-					
-				},2000)
-				setTimeout(()=>{
-					//手动调用done，告诉vue这个动画已经执行完成
-					done()
-				},4000)
+				Velocity(el,{
+					opacity: 1
+				},{
+					duration:1000,
+					complete:done
+				})
 
 			},
 			handleAfterEnter:function(el){
-				el.style.color="#000"
+				console.log("动画结束")
 
 			}
 		}
