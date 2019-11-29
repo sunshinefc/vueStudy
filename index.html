@@ -2,25 +2,33 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Vue中的JS动画与velocity</title>
-	<link rel="stylesheet" href="./animate.css">
+	<title>Vue中多个元素或组件的过渡</title>
+	<style>
+		.v-enter,.v-leave-to{
+			opacity: 0;
+		}
+		.v-enter-active,.v-leave-active{
+			transition: opacity 1s;
+		}
+	</style>
 </head>
 <body>
+	<!-- 通过key 减少复用 
+		 mode in-out先进入，再隐藏
+		 	  out-in先隐藏，再显示
+	-->
 
 	<div id="root">
-		<transition 
-			name="fade"
-			@before-enter="handleBeforeEnter"
-			@enter="handleEnter"
-			@after-enter="handleAfterEnter">
-			<div v-show="show">hello word</div>
+		<transition mode="out-in">
+			<div v-if="show" key="hello">hello word</div>
+			<div v-else key="bye">Bye word</div>
 		</transition>
 		<button @click="handleClick">toggle</button>	
 	</div>
 </body>
 </html>
 <script src="vue.js"></script>
-<script src="velocity.min.js"></script>
+
 <script>
 
 	var vm=new Vue({
@@ -31,25 +39,8 @@
 		methods:{
 			handleClick:function(){
 				this.show=!this.show
-			},
-			//还没有入场，让元素opacity变成0
-			handleBeforeEnter:function(el){
-				el.style.opacity=0;
-			},
-			//对el元素实现一个动画，complete告诉vue动画执行完成
-			handleEnter:function(el,done){
-				Velocity(el,{
-					opacity: 1
-				},{
-					duration:1000,
-					complete:done
-				})
-
-			},
-			handleAfterEnter:function(el){
-				console.log("动画结束")
-
 			}
+			
 		}
 	})
 </script>
