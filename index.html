@@ -2,48 +2,39 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Vue中同时使用过度和动画</title>
+	<title>Vue中的JS动画与velocity</title>
 	<link rel="stylesheet" href="./animate.css">
-	<style>
-		.fade-enter,.fade-leave-to{
-			opacity: 0;
-		}
-		.fade-enter-active,.fade-leave-active{
-			transition: opacity 3s;
-		}
-	</style>
-	
 </head>
 <body>
-	<!-- animate.css提供@keyframes css3的动画效果 
-		1、动画时长以transition的动画时长为准
-			type="transition"
-		2、自定义动画时长 10s
-			：duration="10000"  
-		3、入场动画时长5s，出厂动画时长10s
-			:duration="{enter:5000, leave:10000}"
-	-->
+	<!-- js动画钩子
+		入场动画
+		1、before-enter
+			元素即将显示的瞬间，vue会触发before-enter函数（控制台打印出before-enter）
+		2、enter
+			接收两个参数，一个el  一个done（回调函数）
+			开始运行动画效果，动画写在enter钩子
+			done被调用后，vue触发after-enter事件
+		3、after-enter
+		出场动画
+		1、before-leave
+		2、leave
+		3、after-leave
+	 -->
 	<div id="root">
 		<transition 
-			:duration="{enter:5000, leave:10000}"
 			name="fade"
-			appear
-			enter-active-class="animated swing fade-enter-active" 
-			leave-active-class="animated shake fade-leave-active"
-			appear-active-class="animated swing">
+			@before-enter="handleBeforeEnter"
+			@enter="handleEnter"
+			@after-enter="handleAfterEnter">
 			<div v-show="show">hello word</div>
 		</transition>
-		
-		
-		<button @click="handleClick">切换</button>	
+		<button @click="handleClick">toggle</button>	
 	</div>
 </body>
 </html>
 <script src="vue.js"></script>
 <script>
-
-
-
+	// el是指动画包裹的div标签
 	var vm=new Vue({
 		el:'#root',	
 		data:{
@@ -52,6 +43,25 @@
 		methods:{
 			handleClick:function(){
 				this.show=!this.show
+			},
+			handleBeforeEnter:function(el){
+				el.style.color='red'
+				console.log('before-enter')
+			},
+			handleEnter:function(el,done){
+				setTimeout(()=>{
+					el.style.color='green'
+					
+				},2000)
+				setTimeout(()=>{
+					//手动调用done，告诉vue这个动画已经执行完成
+					done()
+				},4000)
+
+			},
+			handleAfterEnter:function(el){
+				el.style.color="#000"
+
 			}
 		}
 	})
