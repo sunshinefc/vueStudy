@@ -3,15 +3,6 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Vue中的动画封装</title>
-	<style>
-
-		.v-enter,.v-leave-to{
-			opacity: 0;
-		}
-		.v-enter-active,.v-leave-active{
-			transition: opacity 1s;
-		}
-	</style>
 	
 </head>
 <body>
@@ -34,10 +25,21 @@
 	Vue.component('fade',{
 		props:['show'],
 		template:`
-			<transition>
+			<transition @before-enter="handleBeforeEnter" @enter="handleEnter">
 				<slot v-if="show"></slot>
 			</transition>
-		`
+		`,
+		methods:{
+			handleBeforeEnter:function(el){
+				el.style.color='red'
+			},
+			handleEnter:function(el,done){
+				setTimeout(()=>{
+					el.style.color='green'
+					done()
+				},2000)
+			}
+		}
 
 	})
 
