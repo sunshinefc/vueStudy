@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Vue中列表过渡</title>
+	<title>Vue中的动画封装</title>
 	<style>
 
 		.v-enter,.v-leave-to{
@@ -16,24 +16,13 @@
 </head>
 <body>
 		<div id="root">
-			<transition-group>
-				<div v-for="item of list" :key="item.id">
-					{{item.title}}
-				</div>
-			</transition-group>
-
-			<!-- 原理：相当于 :列表过渡转化为单个元素过渡-->
-			<transition>
+			<fade :show="show">
 				<div>hello world</div>
-			</transition>
-			<transition>
-				<div>hello world</div>
-			</transition>
-			<transition>
-				<div>hello world</div>
-			</transition>
-
-			<button @click="handleBtnClick">Add</button>
+			</fade>
+			<fade :show="show">
+				<h1>hello world</h1>
+			</fade>
+			<button @click="handleBtnClick">toggle</button>
 			
 		</div>
 </body>
@@ -41,18 +30,25 @@
 <script src="vue.js"></script>
 
 <script>
-	var count=0;
+	// 封装动画组件:显示隐藏
+	Vue.component('fade',{
+		props:['show'],
+		template:`
+			<transition>
+				<slot v-if="show"></slot>
+			</transition>
+		`
+
+	})
+
 	var vm=new Vue({
 		el:'#root',
 		data:{
-			list:[]
+			show:false
 		},
 		methods:{
 			handleBtnClick:function(){
-				this.list.push({
-					id:count++,
-					title:'hello word'
-				})
+				this.show=!this.show
 
 			}
 		}
