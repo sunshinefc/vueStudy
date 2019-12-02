@@ -3,15 +3,39 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Vue中列表过渡</title>
+	<style>
+
+		.v-enter,.v-leave-to{
+			opacity: 0;
+		}
+		.v-enter-active,.v-leave-active{
+			transition: opacity 1s;
+		}
+	</style>
 	
 </head>
 <body>
-	<!-- 能不用index做key值，就不用index做key值 -->
-	<div id="root">
-		<div v-for="item of list" :key="item.id">{{item.title}}</div>
-		<button @click="handleBtnClick">Add</button>
-		
-	</div>
+		<div id="root">
+			<transition-group>
+				<div v-for="item of list" :key="item.id">
+					{{item.title}}
+				</div>
+			</transition-group>
+
+			<!-- 原理：相当于 :列表过渡转化为单个元素过渡-->
+			<transition>
+				<div>hello world</div>
+			</transition>
+			<transition>
+				<div>hello world</div>
+			</transition>
+			<transition>
+				<div>hello world</div>
+			</transition>
+
+			<button @click="handleBtnClick">Add</button>
+			
+		</div>
 </body>
 </html>
 <script src="vue.js"></script>
