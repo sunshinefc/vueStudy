@@ -2,46 +2,36 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Vue中多个元素或组件的过渡</title>
-	<style>
-		.v-enter,.v-leave-to{
-			opacity: 0;
-		}
-		.v-enter-active,.v-leave-active{
-			transition: opacity 1s;
-		}
-	</style>
+	<title>Vue中列表过渡</title>
+	
 </head>
 <body>
+	<!-- 能不用index做key值，就不用index做key值 -->
 	<div id="root">
-		<!-- 通过is关联的数据，控制展示哪一个组件 -->
-		<transition mode="out-in">
-			<component :is="type"></component>
-			
-		</transition>
-		<button @click="handleClick">toggle</button>	
+		<div v-for="item of list" :key="item.id">{{item.title}}</div>
+		<button @click="handleBtnClick">Add</button>
+		
 	</div>
 </body>
 </html>
 <script src="vue.js"></script>
 
 <script>
-	Vue.component('child',{
-		template:'<div>child</div>'
-	})
-	Vue.component('child-one',{
-		template:'<div>child-one</div>'
-	})
+	var count=0;
 	var vm=new Vue({
-		el:'#root',	
+		el:'#root',
 		data:{
-			type:'child'
+			list:[]
 		},
 		methods:{
-			handleClick:function(){
-				this.type=this.type==='child'?'child-one':'child'
+			handleBtnClick:function(){
+				this.list.push({
+					id:count++,
+					title:'hello word'
+				})
+
 			}
-			
 		}
+	
 	})
 </script>
